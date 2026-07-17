@@ -671,398 +671,72 @@
             </div>
         </div>
     </footer>
-
     <!-- WHITELIST MODAL -->
-    <div id="wl-modal" onclick="if (event.target.id === 'wl-modal') hideWLModal()" 
-         class="hidden fixed inset-0 bg-black/90 backdrop-blur-xl z-[100] flex items-center justify-center p-6">
-        <div onclick="event.stopImmediatePropagation()" 
-             class="modal w-full max-w-lg bg-[#111116] border border-white/10 rounded-3xl overflow-hidden">
-            
-            <!-- Modal Header -->
-            <div class="px-8 pt-8 pb-5 flex items-center justify-between border-b border-white/10">
+<div id="wl-modal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-xl z-[100] flex items-center justify-center p-6">
+    <div class="w-full max-w-md bg-[#111116] rounded-3xl overflow-hidden">
+        <div class="px-8 pt-8 pb-5 border-b border-white/10">
+            <h2 class="font-display text-3xl tracking-tighter">Apply for Whitelist</h2>
+            <p class="text-[#ccff00] text-sm">ROBINCHUBBS GENESIS</p>
+        </div>
+        <div class="p-8">
+            <form id="wl-form" onsubmit="submitWhitelist(event)" class="space-y-6">
                 <div>
-                    <div class="font-display text-3xl tracking-tighter">Apply for Whitelist</div>
-                    <div class="text-xs text-[#ccff00] font-medium tracking-widest">ROBINCHUBBS GENESIS</div>
+                    <label class="block text-xs font-semibold text-white/60 mb-2">TWITTER / X HANDLE</label>
+                    <input type="text" id="twitter" required placeholder="@username" class="w-full bg-black border border-white/20 rounded-2xl px-5 py-4 focus:border-[#ccff00]">
                 </div>
-                <button onclick="hideWLModal()" class="w-10 h-10 flex items-center justify-center text-2xl text-white/60 hover:text-white transition-colors">×</button>
-            </div>
-
-            <div class="p-8">
-                <form id="wl-form" onsubmit="submitWhitelist(event)">
-                    <div class="space-y-5">
-                        <!-- Twitter -->
-                        <div>
-                            <label class="text-xs font-semibold tracking-wider text-white/60 block mb-1.5">TWITTER / X HANDLE</label>
-                            <div class="relative">
-                                <div class="absolute left-5 top-1/2 -translate-y-1/2 text-white/40">
-                                    <i class="fa-brands fa-x-twitter"></i>
-                                </div>
-                                <input type="text" id="twitter" placeholder="@yourhandle" required 
-                                       class="w-full bg-[#0a0a0f] border border-white/20 focus:border-[#ccff00] rounded-2xl pl-12 pr-5 py-3.5 outline-none text-white placeholder:text-white/40">
-                            </div>
-                        </div>
-
-                        <!-- Wallet -->
-                        <div>
-                            <label class="text-xs font-semibold tracking-wider text-white/60 block mb-1.5">WALLET ADDRESS</label>
-                            <input type="text" id="wallet" placeholder="Your wallet address" required 
-                                   class="w-full bg-[#0a0a0f] border border-white/20 focus:border-[#ccff00] rounded-2xl px-5 py-3.5 outline-none text-white placeholder:text-white/40 font-mono text-sm">
-                        </div>
-                    </div>
-
-                    <div class="mt-8">
-                        <button type="submit" id="submit-btn"
-                                class="neon-button w-full py-4 rounded-3xl text-base font-extrabold flex items-center justify-center gap-x-2">
-                            <span id="submit-text">SUBMIT APPLICATION</span>
-                            <span id="submit-loading" class="hidden"><i class="fa-solid fa-spinner fa-spin"></i></span>
-                        </button>
-                    </div>
-                    
-                    <p class="text-center text-[10px] text-white/40 mt-4">We'll review your application and notify you via Twitter DM.</p>
-                </form>
-            </div>
+                <div>
+                    <label class="block text-xs font-semibold text-white/60 mb-2">REPOST / COMMENT</label>
+                    <textarea id="repost" required rows="4" placeholder="Link repost atau komentar kamu..." class="w-full bg-black border border-white/20 rounded-2xl px-5 py-4 focus:border-[#ccff00]"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-white/60 mb-2">EVM ADDRESS</label>
+                    <input type="text" id="evmAddress" required placeholder="0x..." class="w-full bg-black border border-white/20 rounded-2xl px-5 py-4 focus:border-[#ccff00] font-mono">
+                </div>
+                <button type="submit" id="submitBtn" class="neon-button w-full py-4 rounded-3xl text-lg font-bold">SUBMIT APPLICATION</button>
+            </form>
         </div>
     </div>
+</div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#111116] border border-[#ccff00]/40 text-white px-6 py-3 rounded-3xl shadow-2xl flex items-center gap-x-3 z-[200]">
-        <i class="fa-solid fa-check-circle text-[#ccff00]"></i>
-        <span id="toast-text" class="font-medium"></span>
-    </div>
+<script>
+    const supabase = Supabase.createClient(
+        'https://jfbscbmyugyecqfcqcrh.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmYnNjYm15dWd5ZWNxZmNxY3JoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyMzE3NTgsImV4cCI6MjA5OTgwNzc1OH0.jRLXnFUOgumgJC76iF8QDxxaXitNtA5v9P_T-PSAato'
+    );
 
-    <script>
-        // Tailwind Script
-        function initializeTailwind() {
-            document.documentElement.style.setProperty('--accent', '#ccff00');
-            
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        fontFamily: {
-                            'display': ['Space Grotesk', 'Inter', 'system-ui', 'sans-serif']
-                        }
-                    }
-                }
-            };
+    async function submitWhitelist(e) {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.textContent = "Submitting...";
+
+        try {
+            const { error } = await supabase.from('whitelist_applications').insert([{
+                twitter: document.getElementById('twitter').value.trim(),
+                repost: document.getElementById('repost').value.trim(),
+                evm_address: document.getElementById('evmAddress').value.trim()
+            }]);
+
+            if (error) throw error;
+
+            alert("✅ Application submitted successfully!");
+            document.getElementById('wl-form').reset();
+            hideWLModal();
+        } catch (err) {
+            alert("❌ Error: " + (err.message || "Please try again"));
+        } finally {
+            btn.disabled = false;
+            btn.textContent = "SUBMIT APPLICATION";
         }
+    }
 
-        // Falling Logo Animation - SUPER COOL EFFECT
-        function createFallingLogos() {
-            const container = document.getElementById('falling-container');
-            if (!container) return;
+    function showWLModal() {
+        document.getElementById('wl-modal').classList.remove('hidden');
+        document.getElementById('wl-modal').classList.add('flex');
+    }
 
-            const logoSrc = 'https://i.ibb.co.com/Q3B5LKV5/aaaa3496-d60c-44bd-8f84-12a4d64e3640.jpg';
-            const totalLogos = 18; // Number of falling logos
-
-            for (let i = 0; i < totalLogos; i++) {
-                const logo = document.createElement('img');
-                logo.src = logoSrc;
-                logo.className = 'falling-logo';
-                
-                // Random positioning and animation properties
-                const leftPos = Math.random() * 100;
-                const size = 45 + Math.random() * 55; // 45px - 100px
-                const duration = 7 + Math.random() * 11; // 7s - 18s
-                const delay = Math.random() * -25; // Negative delay so some start mid-fall
-                const opacity = 0.45 + Math.random() * 0.4;
-
-                logo.style.left = `${leftPos}vw`;
-                logo.style.width = `${size}px`;
-                logo.style.height = `${size}px`;
-                logo.style.animationDuration = `${duration}s`;
-                logo.style.animationDelay = `${delay}s`;
-                logo.style.opacity = opacity;
-                logo.style.zIndex = Math.floor(Math.random() * 5) + 1;
-
-                // Random slight horizontal drift using CSS variable or inline
-                const drift = (Math.random() - 0.5) * 60;
-                logo.style.setProperty('--drift', `${drift}px`);
-
-                // Add slight random rotation direction
-                if (Math.random() > 0.5) {
-                    logo.style.animationDirection = 'reverse';
-                }
-
-                container.appendChild(logo);
-
-                // Remove and recreate when animation ends for infinite loop effect
-                logo.addEventListener('animationend', () => {
-                    logo.style.animation = 'none';
-                    logo.offsetHeight; // Trigger reflow
-                    
-                    // Reset position
-                    logo.style.left = `${Math.random() * 100}vw`;
-                    logo.style.animation = `fall ${duration}s linear forwards`;
-                    logo.style.animationDelay = `-${Math.random() * 5}s`;
-                });
-            }
-        }
-
-        // Mobile Menu
-        function toggleMobileMenu() {
-            const drawer = document.getElementById('mobile-drawer');
-            const overlay = document.getElementById('mobile-overlay');
-            const isOpen = !drawer.classList.contains('translate-x-full');
-            
-            if (isOpen) {
-                closeMobileMenu();
-            } else {
-                drawer.classList.remove('translate-x-full');
-                overlay.classList.remove('opacity-0', 'pointer-events-none');
-                document.body.style.overflow = 'hidden';
-            }
-        }
-
-        function closeMobileMenu() {
-            const drawer = document.getElementById('mobile-drawer');
-            const overlay = document.getElementById('mobile-overlay');
-            drawer.classList.add('translate-x-full');
-            overlay.classList.add('opacity-0', 'pointer-events-none');
-            document.body.style.overflow = '';
-        }
-
-        // Whitelist Modal
-        let modalOpen = false;
-
-        function showWLModal() {
-            const modal = document.getElementById('wl-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            modalOpen = true;
-            
-            // Focus first input
-            setTimeout(() => {
-                document.getElementById('twitter').focus();
-            }, 300);
-        }
-
-        function hideWLModal() {
-            const modal = document.getElementById('wl-modal');
-            modal.classList.remove('flex');
-            modal.classList.add('hidden');
-            modalOpen = false;
-        }
-
-        // Supabase Configuration
-        const SUPABASE_URL = 'https://uydolcvxcaxqlzwvciha.supabase.co/rest/v1/';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5ZG9sY3Z4Y2F4cWx6d3ZjaWhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwNTA0ODQsImV4cCI6MjA5OTYyNjQ4NH0.Geb-6EublNY5es6grDhp66djcTUuPIgQUuaX-WNnzuc';
-
-        // Submit Whitelist Form to Supabase
-        async function submitWhitelist(e) {
-            e.preventDefault();
-            
-            const submitBtn = document.getElementById('submit-btn');
-            const submitText = document.getElementById('submit-text');
-            const submitLoading = document.getElementById('submit-loading');
-            
-            const twitter = document.getElementById('twitter').value.trim();
-            const wallet = document.getElementById('wallet').value.trim();
-
-            // Basic validation
-            if (!twitter || !wallet) {
-                showToast("Please fill in all fields", true);
-                return;
-            }
-
-            // UI Loading state
-            submitBtn.disabled = true;
-            submitText.classList.add('hidden');
-            submitLoading.classList.remove('hidden');
-
-            try {
-                const response = await fetch(`${SUPABASE_URL}whitelist_applications`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                        'Prefer': 'return=minimal'
-                    },
-                    body: JSON.stringify({
-                        twitter: twitter,
-                        wallet_address: wallet,
-                        status: 'pending'
-                    })
-                });
-
-                if (response.ok) {
-                    // Success
-                    hideWLModal();
-                    showToast("Application submitted successfully! We'll contact you soon.");
-                    
-                    // Reset form
-                    document.getElementById('wl-form').reset();
-                    
-                    // Optional: Confetti effect on success
-                    launchConfetti();
-                } else {
-                    const errorData = await response.text();
-                    console.error('Supabase error:', errorData);
-                    showToast("Something went wrong. Please try again later.", true);
-                }
-            } catch (error) {
-                console.error('Network error:', error);
-                showToast("Network error. Please check your connection.", true);
-            } finally {
-                submitBtn.disabled = false;
-                submitText.classList.remove('hidden');
-                submitLoading.classList.add('hidden');
-            }
-        }
-
-        // Toast notification
-        function showToast(message, isError = false) {
-            const toast = document.getElementById('toast');
-            const toastText = document.getElementById('toast-text');
-            
-            toastText.textContent = message;
-            toast.className = `fixed bottom-6 left-1/2 -translate-x-1/2 px-6 py-3.5 rounded-3xl shadow-2xl flex items-center gap-x-3 z-[200] border ${isError ? 'bg-red-900/90 border-red-500/40 text-red-200' : 'bg-[#111116] border-[#ccff00]/40 text-white'}`;
-            
-            toast.style.display = 'flex';
-            
-            setTimeout(() => {
-                toast.style.transition = 'all 0.3s ease';
-                toast.style.opacity = '0';
-                
-                setTimeout(() => {
-                    toast.style.display = 'none';
-                    toast.style.opacity = '1';
-                    toast.style.transition = '';
-                }, 300);
-            }, 3800);
-        }
-
-        // Simple confetti for successful WL submission
-        function launchConfetti() {
-            const colors = ['#ccff00', '#ffcc00', '#ffffff'];
-            const confettiCount = 80;
-            
-            for (let i = 0; i < confettiCount; i++) {
-                const confetto = document.createElement('div');
-                confetto.style.position = 'fixed';
-                confetto.style.left = Math.random() * window.innerWidth + 'px';
-                confetto.style.top = '-10px';
-                confetto.style.width = '8px';
-                confetto.style.height = '8px';
-                confetto.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-                confetto.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetto.style.opacity = Math.random() * 0.8 + 0.4;
-                confetto.style.zIndex = '99999';
-                confetto.style.pointerEvents = 'none';
-                document.body.appendChild(confetto);
-
-                const duration = Math.random() * 2800 + 2200;
-                const angle = Math.random() * 60 - 20;
-                const velocity = Math.random() * 2 + 2.5;
-
-                confetto.animate([
-                    { 
-                        transform: `translateY(0) rotate(0deg)`,
-                        opacity: confetto.style.opacity 
-                    },
-                    { 
-                        transform: `translateY(${window.innerHeight + 100}px) rotate(${angle * 8}deg)`,
-                        opacity: 0 
-                    }
-                ], {
-                    duration: duration,
-                    easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
-                }).onfinish = () => confetto.remove();
-            }
-        }
-
-        // Keyboard escape for modal
-        function setupKeyboardControls() {
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    const modal = document.getElementById('wl-modal');
-                    if (!modal.classList.contains('hidden')) {
-                        hideWLModal();
-                    }
-                }
-                
-                if (e.key === '/' && document.activeElement.tagName === 'BODY') {
-                    e.preventDefault();
-                    const collection = document.getElementById('collection');
-                    collection.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-
-            // Easter egg: Press "c" to trigger falling logos burst
-            let pressCount = 0;
-            document.addEventListener('keypress', function(e) {
-                if (e.key.toLowerCase() === 'c') {
-                    pressCount++;
-                    if (pressCount >= 3) {
-                        const container = document.getElementById('falling-container');
-                        container.style.transition = 'opacity 0.2s';
-                        container.style.opacity = '0.3';
-                        
-                        setTimeout(() => {
-                            container.style.opacity = '0.75';
-                            pressCount = 0;
-                        }, 1200);
-                    }
-                }
-            });
-        }
-
-        // Smooth scroll for anchor links
-        function setupSmoothScroll() {
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        e.preventDefault();
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
-        }
-
-        // Initialize everything
-        function initializeWebsite() {
-            initializeTailwind();
-            
-            // Start the amazing falling logo effect
-            createFallingLogos();
-            
-            // Setup interactions
-            setupSmoothScroll();
-            setupKeyboardControls();
-            
-            // Bonus: Random subtle pulse on neon buttons
-            setInterval(() => {
-                const buttons = document.querySelectorAll('.neon-button');
-                buttons.forEach(btn => {
-                    if (Math.random() > 0.7) {
-                        btn.style.boxShadow = '0 0 35px rgb(204 255 0 / 0.45)';
-                        setTimeout(() => {
-                            if (btn) btn.style.boxShadow = '0 0 20px rgb(204 255 0 / 0.3)';
-                        }, 700);
-                    }
-                });
-            }, 4500);
-
-            // Welcome console message for devs
-            console.log('%c[RobinChubbs] Website initialized. Falling logos active. Ready to deploy!', 'color:#ccff00; font-size:9px');
-            
-            // Optional: Preload some images if needed (already in DOM)
-        }
-
-        // Boot the site
-        window.onload = function() {
-            initializeWebsite();
-        }
-
-        // Expose some functions if needed for debugging
-        window.RobinChubbs = {
-            triggerConfetti: () => launchConfetti(),
-            showWhitelist: () => showWLModal()
-        };
-    </script>
-</body>
-</html>
+    function hideWLModal() {
+        document.getElementById('wl-modal').classList.add('hidden');
+        document.getElementById('wl-modal').classList.remove('flex');
+    }
+</script>
